@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Status</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Function to update user status
+            function updateUserStatus() {
+                $.ajax({
+                    url: '/user_status',
+                    type: 'GET',
+                    success: function(response) {
+                        $('#status').text(response.status);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching user status:', error);
+                    }
+                });
+            }
+
+            // Update user status initially
+            updateUserStatus();
+
+            // Update user status every 2 minutes
+            setInterval(updateUserStatus, 2 * 60 * 1000); // 2 minutes in milliseconds
+        });
+    </script>
+</head>
+<body>
+    <h1>User Status</h1>
+    <p id="status">Waiting for status...</p>
+</body>
+</html>
