@@ -27,6 +27,10 @@ def capture_image():
 
 # Function to check if a user is present in the image
 def is_user_present(image):
+    # Check if the image is None
+    if image is None:
+        return False
+    
     # Convert the image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
@@ -53,20 +57,6 @@ def is_user_present(image):
     else:
         return False
 
-# Function to update user status
-def update_user_status():
-    # Capture an image from the webcam
-    image = capture_image()
-        
-    if image is not None:
-        # Check if a user is present in the image
-        user_present = is_user_present(image)
-        
-        # Return user status
-        return "User is online" if user_present else "User is offline"
-    else:
-        return "Error: Couldn't capture an image"
-
 # Route to serve the HTML page
 @app.route('/')
 def index():
@@ -75,7 +65,8 @@ def index():
 # Route to get user status
 @app.route('/user_status')
 def get_user_status():
-    status = update_user_status()
+    # Check if the user is present and return the status
+    status = "User is online" if is_user_present(capture_image()) else "User is offline"
     return jsonify({'status': status})
 
 if __name__ == "__main__":
