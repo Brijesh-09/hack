@@ -21,11 +21,34 @@
                 });
             }
 
+            // Function to check user presence and update status
+            function checkUserPresence() {
+                $.ajax({
+                    url: '/check_presence',
+                    type: 'GET',
+                    success: function(response) {
+                        // If user is present, update status to online
+                        if (response.present) {
+                            $('#status').text('User is online');
+                        } else {
+                            // If user is not present, update status to offline
+                            $('#status').text('User is offline');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error checking user presence:', error);
+                    }
+                });
+            }
+
             // Update user status initially
             updateUserStatus();
 
-            // Update user status every 2 minutes
-            setInterval(updateUserStatus, 2 * 60 * 1000); // 2 minutes in milliseconds
+            // Update user status every minute
+            setInterval(updateUserStatus, 60 * 1000); // 1 minute in milliseconds
+
+            // Check user presence every minute
+            setInterval(checkUserPresence, 60 * 1000); // 1 minute in milliseconds
         });
     </script>
 </head>
